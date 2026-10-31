@@ -168,36 +168,104 @@ const F = {
   n: ['Ñ', 'Similar a «nh»: año, mañana, España.']
 };
 
-/* ---------- Textos Diarios (Nivel A1) ---------- */
+/* ---------- Textos de Práctica: Cultura y Literatura Latinoamericana ---------- */
 const TEXTS = [
-  { t: 'Trabajando en casa', tema: 'Gerundio', f: ['ger', 'j', 'h'],
-    txt: 'Hoy estoy trabajando en casa. Estoy tomando café y escribiendo un correo para un cliente. Mi hija está jugando en el jardín. Más tarde, comemos juntos.' },
-  { t: 'La reunión', tema: 'Trabajo', f: ['cion', 'j', 'dt'],
-    txt: 'Buenos días a todos. Hoy tenemos una reunión con un cliente nuevo. El cliente necesita una solución de integración. Yo presento la arquitectura y mi jefe habla del precio.' },
-  { t: 'El perro de Rosa', tema: 'Vida diaria', f: ['rr', 'e'],
-    txt: 'Rosa tiene un perro muy rápido. El perro corre por la calle y llega hasta el río. Rosa grita: ¡Ramón, ven aquí! El perro regresa corriendo, muy contento.' },
-  { t: 'Por la noche', tema: 'Rutina', f: ['e', 'dt'],
-    txt: 'Por la noche ceno con mi familia. Después, leo un libro o veo una película. Antes de dormir, tomo un té con leche. Me gusta la noche tranquila.' },
-  { t: 'Mi ciudad', tema: 'Lugares', f: ['c', 'dt', 'l'],
-    txt: 'Vivo en una ciudad pequeña y tranquila. En el centro hay una plaza, una iglesia y muchos cafés. Los sábados, la gente camina por el parque. Es un lugar ideal para vivir.' },
-  { t: 'Música latina', tema: 'Cultura', f: ['nas', 'j', 'dt'],
-    txt: 'Me gusta mucho la música latina. Escucho a Jorge Drexler y a Natalia Lafourcade. Sus canciones hablan del amor, del tiempo y de los viajes. Con la música, también aprendo palabras nuevas.' },
-  { t: 'Una llamada', tema: 'Trabajo', f: ['ll', 's', 'dt'],
-    txt: 'Hola, buenas tardes. Le llamo de parte de la empresa. Quisiera agendar una llamada con usted para el lunes. ¿Tiene tiempo por la mañana? Muchas gracias, hasta luego.' },
-  { t: 'En el restaurante', tema: 'Vida diaria', f: ['rr', 'll', 'j'],
-    txt: 'Buenas tardes. Quisiera una mesa para tres personas, por favor. Para tomar, un jugo de naranja. Para comer, arroz con pollo y una ensalada. Al final, la cuenta, por favor.' },
-  { t: 'Mi rutina', tema: 'Rutina', f: ['v', 'e'],
-    txt: 'Me levanto temprano todos los días. Desayuno pan con queso y un café negro. Voy al trabajo en autobús. Vuelvo a casa a las seis de la tarde.' },
-  { t: 'El fin de semana', tema: 'Ocio', f: ['ll', 'h', 's'],
-    txt: 'El sábado voy a la playa con mi familia. Hace sol y el agua está muy rica. Los niños hacen castillos de arena. Por la tarde, comemos pescado y tomamos helado.' },
-  { t: 'Me presento', tema: 'Trabajo', f: ['j', 'cion', 'll'],
-    txt: 'Me llamo Dan y soy arquitecto de soluciones. Trabajo en una empresa de tecnología. Ayudo a los clientes a conectar sus sistemas. Me interesa mucho la inteligencia artificial.' },
-  { t: 'El tiempo', tema: 'Vida diaria', f: ['c', 'll', 'h'],
-    txt: 'Hoy hace mucho calor. El cielo está azul y no hay nubes. Mañana va a llover por la tarde. Tengo que llevar un paraguas al trabajo.' },
-  { t: '¿Qué estás haciendo?', tema: 'Gerundio', f: ['ger', 'c'],
-    txt: '¿Qué estás haciendo? Estoy leyendo un libro muy bueno. ¿Y tu hermano? Está durmiendo en el sofá. Mi madre está cocinando y mi padre está escuchando la radio.' },
-  { t: 'Un viaje a México', tema: 'Cultura', f: ['j', 'n', 'nas'],
-    txt: 'El próximo año quiero viajar a México. Quiero conocer la capital y probar los tacos. También quiero visitar las pirámides. Va a ser un viaje inolvidable.' }
+  {
+    t: 'El mar de fueguitos · Eduardo Galeano',
+    tema: 'Literatura · Uruguay',
+    f: ['e', 'j', 'rr'],
+    txt: 'El mundo es eso: un montón de gente, un mar de fueguitos. Cada persona brilla con luz propia entre todas las demás. No hay dos fuegos iguales; hay fuegos grandes y fuegos chicos, y fuegos de todos los colores.'
+  },
+  {
+    t: 'Los hombres de maíz · Popol Vuh',
+    tema: 'Pueblos originarios · Maya Kʼicheʼ',
+    f: ['dt', 'j', 'nas'],
+    txt: 'De maíz amarillo y de maíz blanco se hizo su carne; de masa de maíz se hicieron los brazos y las piernas del hombre. Únicamente masa de maíz entró en la carne de nuestros primeros padres para darles vida y entendimiento.'
+  },
+  {
+    t: 'Gracias a la vida · Violeta Parra',
+    tema: 'Música · Chile',
+    f: ['v', 'dt', 'l'],
+    txt: 'Gracias a la vida que me ha dado tanto. Me dio dos luceros que cuando los abro, perfecto distingo el negro del blanco, y en el alto cielo su fondo estrellado, y en las multitudes el hombre que yo amo.'
+  },
+  {
+    t: 'Cien años de soledad · Gabriel García Márquez',
+    tema: 'Literatura · Colombia',
+    f: ['rr', 'dt', 'j'],
+    txt: 'Muchos años después, frente al pelotón de fusilamiento, el coronel Aureliano Buendía había de recordar aquella tarde remota en que su padre lo llevó a conocer el hielo. Macondo era entonces una aldea de veinte casas de barro y cañabrava.'
+  },
+  {
+    t: 'Amo el canto del cenzontle · Nezahualcóyotl',
+    tema: 'Pueblos originarios · Náhuatl',
+    f: ['c', 'nas', 'dt'],
+    txt: 'Amo el canto del cenzontle, pájaro de cuatrocientas voces. Amo el color del jade y el enervante perfume de las flores, pero amo más a mi hermano, el hombre, que camina sobre la misma tierra.'
+  },
+  {
+    t: 'Versos sencillos · José Martí',
+    tema: 'Poesía · Cuba',
+    f: ['s', 'nas', 'l'],
+    txt: 'Yo soy un hombre sincero de donde crece la palma, y antes de morirme quiero echar mis versos del alma. Yo vengo de todas partes, y hacia todas partes voy: arte soy entre las artes, en los montes, monte soy.'
+  },
+  {
+    t: 'Pachamama y el Sumak Kawsay',
+    tema: 'Pueblos originarios · Andes',
+    f: ['nas', 'dt', 'rr'],
+    txt: 'En los Andes aprendemos que la tierra no nos pertenece, sino que nosotros pertenecemos a la Pachamama. El buen vivir consiste en caminar con respeto y en armonía con el río, el viento, la montaña y la comunidad entera.'
+  },
+  {
+    t: 'Táctica y estrategia · Mario Benedetti',
+    tema: 'Poesía · Uruguay',
+    f: ['dt', 'e', 'j'],
+    txt: 'Mi táctica es mirarte, aprender como sos, quererte como sos. Mi táctica es hablarte y escucharte, construir con palabras un puente indestructible. Mi estrategia es en cambio más profunda y más simple: que un día cualquiera, por fin me necesites.'
+  },
+  {
+    t: 'Alturas de Macchu Picchu · Pablo Neruda',
+    tema: 'Poesía · Chile',
+    f: ['rr', 'll', 'c'],
+    txt: 'Sube a nacer conmigo, hermano. Dame la mano desde la profunda zona de tu dolor diseminado. Mírame desde el fondo de la tierra, labrador, tejedor, pastor callado. Mostradme vuestra sangre y vuestro antiguo surco.'
+  },
+  {
+    t: 'El Aleph · Jorge Luis Borges',
+    tema: 'Literatura · Argentina',
+    f: ['ll', 'j', 'dt'],
+    txt: 'Vi el populoso mar, vi el alba y la tarde, vi las muchedumbres de América, vi una plateada telaraña en el centro de una negra pirámide, vi un laberinto roto. Vi mi cara y mis vísceras, vi tu cara, y sentí vértigo y lloré.'
+  },
+  {
+    t: 'La palabra sagrada · Tradición Guaraní',
+    tema: 'Pueblos originarios · Paraguay',
+    f: ['j', 'e', 'nas'],
+    txt: 'Para los antiguos guaraníes, la palabra es sagrada y engendra el alma humana. La selva no es un recurso que se explota, sino un hogar sagrado donde habitan los espíritus del agua, las aves y los árboles milenarios.'
+  },
+  {
+    t: 'Latinoamérica · Calle 13',
+    tema: 'Música · Puerto Rico',
+    f: ['v', 'rr', 'l'],
+    txt: 'Soy lo que me enseñó mi padre: el que no quiere a su patria, no quiere a su madre. Soy América Latina, un pueblo sin piernas pero que camina. ¡Tú no puedes comprar al viento! ¡Tú no puedes comprar al sol!'
+  },
+  {
+    t: 'Rayuela · Julio Cortázar',
+    tema: 'Literatura · Argentina',
+    f: ['e', 'dt', 'll'],
+    txt: 'Andábamos sin buscarnos, pero sabiendo que andábamos para encontrarnos. Cada vez que nos mirábamos al doblar la esquina de la calle, una leve sonrisa bastaba para comprender que la ciudad entera era nuestro refugio secreto.'
+  },
+  {
+    t: 'El laberinto de la soledad · Octavio Paz',
+    tema: 'Literatura · México',
+    f: ['c', 'j', 'dt'],
+    txt: 'El hombre solitario se niega a ser una parte del todo; el solitario es el todo. La soledad no es una ilusión ni un castigo: es la condición misma de nuestra existencia, el verdadero puente hacia el reencuentro con los otros.'
+  },
+  {
+    t: 'Los hermanos · Atahualpa Yupanqui',
+    tema: 'Música · Argentina',
+    f: ['rr', 'dt', 'v'],
+    txt: 'Yo tengo tantos hermanos que no los puedo contar. En el valle, en la montaña, en la pampa y en el mar. Gente de mano caliente por eso de la amistad, con un llanto para llorar y una guitarra para cantar.'
+  },
+  {
+    t: 'La flor de la canela · Chabuca Granda',
+    tema: 'Música · Perú',
+    f: ['l', 'nas', 'c'],
+    txt: 'Déjame que te cuente, limeño, déjame que te diga la gloria del ensueño que evoca la memoria del viejo puente, del río y de la alameda. Jazmines en el pelo y rosas en la cara, airosa caminaba la flor de la canela.'
+  }
 ];
 
 const dayIdx = () => Math.floor((new Date(new Date().toDateString()) - new Date(2026, 0, 1)) / 864e5);
