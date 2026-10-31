@@ -168,113 +168,18 @@ const F = {
   n: ['Ñ', 'Similar a «nh»: año, mañana, España.']
 };
 
-/* ---------- Textos de Práctica: Cultura y Literatura Latinoamericana ---------- */
-const TEXTS = [
-  {
-    t: 'El mar de fueguitos · Eduardo Galeano',
-    tema: 'Literatura · Uruguay',
-    f: ['e', 'j', 'rr'],
-    txt: 'El mundo es eso: un montón de gente, un mar de fueguitos. Cada persona brilla con luz propia entre todas las demás. No hay dos fuegos iguales; hay fuegos grandes y fuegos chicos, y fuegos de todos los colores.'
-  },
-  {
-    t: 'Los hombres de maíz · Popol Vuh',
-    tema: 'Pueblos originarios · Maya Kʼicheʼ',
-    f: ['dt', 'j', 'nas'],
-    txt: 'De maíz amarillo y de maíz blanco se hizo su carne; de masa de maíz se hicieron los brazos y las piernas del hombre. Únicamente masa de maíz entró en la carne de nuestros primeros padres para darles vida y entendimiento.'
-  },
-  {
-    t: 'Gracias a la vida · Violeta Parra',
-    tema: 'Música · Chile',
-    f: ['v', 'dt', 'l'],
-    txt: 'Gracias a la vida que me ha dado tanto. Me dio dos luceros que cuando los abro, perfecto distingo el negro del blanco, y en el alto cielo su fondo estrellado, y en las multitudes el hombre que yo amo.'
-  },
-  {
-    t: 'Cien años de soledad · Gabriel García Márquez',
-    tema: 'Literatura · Colombia',
-    f: ['rr', 'dt', 'j'],
-    txt: 'Muchos años después, frente al pelotón de fusilamiento, el coronel Aureliano Buendía había de recordar aquella tarde remota en que su padre lo llevó a conocer el hielo. Macondo era entonces una aldea de veinte casas de barro y cañabrava.'
-  },
-  {
-    t: 'Amo el canto del cenzontle · Nezahualcóyotl',
-    tema: 'Pueblos originarios · Náhuatl',
-    f: ['c', 'nas', 'dt'],
-    txt: 'Amo el canto del cenzontle, pájaro de cuatrocientas voces. Amo el color del jade y el enervante perfume de las flores, pero amo más a mi hermano, el hombre, que camina sobre la misma tierra.'
-  },
-  {
-    t: 'Versos sencillos · José Martí',
-    tema: 'Poesía · Cuba',
-    f: ['s', 'nas', 'l'],
-    txt: 'Yo soy un hombre sincero de donde crece la palma, y antes de morirme quiero echar mis versos del alma. Yo vengo de todas partes, y hacia todas partes voy: arte soy entre las artes, en los montes, monte soy.'
-  },
-  {
-    t: 'Pachamama y el Sumak Kawsay',
-    tema: 'Pueblos originarios · Andes',
-    f: ['nas', 'dt', 'rr'],
-    txt: 'En los Andes aprendemos que la tierra no nos pertenece, sino que nosotros pertenecemos a la Pachamama. El buen vivir consiste en caminar con respeto y en armonía con el río, el viento, la montaña y la comunidad entera.'
-  },
-  {
-    t: 'Táctica y estrategia · Mario Benedetti',
-    tema: 'Poesía · Uruguay',
-    f: ['dt', 'e', 'j'],
-    txt: 'Mi táctica es mirarte, aprender como sos, quererte como sos. Mi táctica es hablarte y escucharte, construir con palabras un puente indestructible. Mi estrategia es en cambio más profunda y más simple: que un día cualquiera, por fin me necesites.'
-  },
-  {
-    t: 'Alturas de Macchu Picchu · Pablo Neruda',
-    tema: 'Poesía · Chile',
-    f: ['rr', 'll', 'c'],
-    txt: 'Sube a nacer conmigo, hermano. Dame la mano desde la profunda zona de tu dolor diseminado. Mírame desde el fondo de la tierra, labrador, tejedor, pastor callado. Mostradme vuestra sangre y vuestro antiguo surco.'
-  },
-  {
-    t: 'El Aleph · Jorge Luis Borges',
-    tema: 'Literatura · Argentina',
-    f: ['ll', 'j', 'dt'],
-    txt: 'Vi el populoso mar, vi el alba y la tarde, vi las muchedumbres de América, vi una plateada telaraña en el centro de una negra pirámide, vi un laberinto roto. Vi mi cara y mis vísceras, vi tu cara, y sentí vértigo y lloré.'
-  },
-  {
-    t: 'La palabra sagrada · Tradición Guaraní',
-    tema: 'Pueblos originarios · Paraguay',
-    f: ['j', 'e', 'nas'],
-    txt: 'Para los antiguos guaraníes, la palabra es sagrada y engendra el alma humana. La selva no es un recurso que se explota, sino un hogar sagrado donde habitan los espíritus del agua, las aves y los árboles milenarios.'
-  },
-  {
-    t: 'Latinoamérica · Calle 13',
-    tema: 'Música · Puerto Rico',
-    f: ['v', 'rr', 'l'],
-    txt: 'Soy lo que me enseñó mi padre: el que no quiere a su patria, no quiere a su madre. Soy América Latina, un pueblo sin piernas pero que camina. ¡Tú no puedes comprar al viento! ¡Tú no puedes comprar al sol!'
-  },
-  {
-    t: 'Rayuela · Julio Cortázar',
-    tema: 'Literatura · Argentina',
-    f: ['e', 'dt', 'll'],
-    txt: 'Andábamos sin buscarnos, pero sabiendo que andábamos para encontrarnos. Cada vez que nos mirábamos al doblar la esquina de la calle, una leve sonrisa bastaba para comprender que la ciudad entera era nuestro refugio secreto.'
-  },
-  {
-    t: 'El laberinto de la soledad · Octavio Paz',
-    tema: 'Literatura · México',
-    f: ['c', 'j', 'dt'],
-    txt: 'El hombre solitario se niega a ser una parte del todo; el solitario es el todo. La soledad no es una ilusión ni un castigo: es la condición misma de nuestra existencia, el verdadero puente hacia el reencuentro con los otros.'
-  },
-  {
-    t: 'Los hermanos · Atahualpa Yupanqui',
-    tema: 'Música · Argentina',
-    f: ['rr', 'dt', 'v'],
-    txt: 'Yo tengo tantos hermanos que no los puedo contar. En el valle, en la montaña, en la pampa y en el mar. Gente de mano caliente por eso de la amistad, con un llanto para llorar y una guitarra para cantar.'
-  },
-  {
-    t: 'La flor de la canela · Chabuca Granda',
-    tema: 'Música · Perú',
-    f: ['l', 'nas', 'c'],
-    txt: 'Déjame que te cuente, limeño, déjame que te diga la gloria del ensueño que evoca la memoria del viejo puente, del río y de la alameda. Jazmines en el pelo y rosas en la cara, airosa caminaba la flor de la canela.'
-  }
-];
-
+/* ---------- Textos de Práctica: Catálogo Latinoamericano ---------- */
+const allTexts = () => (typeof window !== 'undefined' && window.TEXTS ? window.TEXTS : []);
+let selectedBiblioText = null;
 const dayIdx = () => Math.floor((new Date(new Date().toDateString()) - new Date(2026, 0, 1)) / 864e5);
 let offset = 0;
 
 function currentText() {
-  if (custom && custom.date === today() && offset === 0) return custom;
-  const n = TEXTS.length;
-  return TEXTS[(((dayIdx() + offset) % n) + n) % n];
+  if (custom && custom.date === today() && offset === 0 && !selectedBiblioText) return custom;
+  if (selectedBiblioText && offset === 0) return selectedBiblioText;
+  const list = allTexts();
+  const n = list.length || 1;
+  return list[(((dayIdx() + offset) % n) + n) % n] || { t: 'Texto del día', tema: 'General', f: [], txt: '' };
 }
 
 /* ---------- Voz Modelo: Azure TTS & Fallback do Navegador ---------- */
@@ -1317,12 +1222,21 @@ function viewHoy() {
   const cur = currentText();
   $('#view').innerHTML = `
   <section class="card">
+    ${
+      selectedBiblioText
+        ? `<div class="biblioActiveBanner">
+             <span>📚 Texto elegido de la biblioteca · <b>${esc(selectedBiblioText.pais)} · ${esc(selectedBiblioText.nivel)}</b></span>
+             <button class="mini" id="resetDaily" title="Volver al texto del día">↺ Texto del día</button>
+           </div>`
+        : ''
+    }
     <div class="readingHeader">
       <div>
-        <p class="eyebrow">${cur.custom ? 'Texto personalizado' : 'Texto del día · ' + esc(cur.tema)}</p>
+        <p class="eyebrow">${cur.custom ? 'Texto personalizado' : (selectedBiblioText ? 'Biblioteca · ' : 'Texto del día · ') + esc(cur.tema)}</p>
         <h2>${esc(cur.t)}</h2>
       </div>
       <div class="textActions">
+        <button class="mini" id="bibBtn" title="Explorar biblioteca de textos">📚 Biblioteca</button>
         <button class="mini" id="other" title="Cambiar a otro texto">↻ Otro</button>
         <button class="mini" id="paste" title="Pegar texto personalizado">📋 Pegar</button>
       </div>
@@ -1371,6 +1285,18 @@ function viewHoy() {
   $('#pPause').onclick = pauseModel;
   $('#pStop').onclick = stopModel;
   updatePlayerUI();
+
+  $('#bibBtn').onclick = () => go('biblio');
+  const rDaily = $('#resetDaily');
+  if (rDaily) {
+    rDaily.onclick = () => {
+      selectedBiblioText = null;
+      offset = 0;
+      result = null;
+      stopModel();
+      viewHoy();
+    };
+  }
 
   $('#other').onclick = () => {
     stopModel();
@@ -1709,6 +1635,221 @@ function viewPaste() {
     result = null;
     viewHoy();
   };
+}
+
+/* ---------- Vista: Biblioteca de Textos ---------- */
+let biblioFilter = {
+  category: 'todos',
+  country: 'todos',
+  level: 'todos',
+  query: ''
+};
+
+function renderBiblioGridOnly() {
+  const all = allTexts();
+  const filtered = typeof filterTexts === 'function' ? filterTexts(all, biblioFilter) : all;
+  const metaEl = document.querySelector('.biblioResultsMeta');
+  if (metaEl) metaEl.innerHTML = `Mostrando <b>${filtered.length}</b> de <b>${all.length}</b> textos`;
+
+  const gridEl = document.querySelector('.biblioGrid');
+  if (gridEl) {
+    gridEl.innerHTML =
+      filtered.length === 0
+        ? `<div class="emptyBiblio">No se encontraron textos con los filtros seleccionados. Intenta con otra búsqueda o limpia los filtros.</div>`
+        : filtered
+            .map(
+              item => `
+          <div class="textItemCard">
+            <div class="textCardTop">
+              <span class="badgeLevel lvl-${item.nivel}">${item.nivel}</span>
+              <span class="badgeCat">${esc((item.tema || '').split(' · ')[0] || item.categoria)}</span>
+              <span class="badgeCountry">${esc(item.pais)}</span>
+            </div>
+            <h3 class="textCardTitle">${esc(item.t)}</h3>
+            <p class="textCardObra">📖 ${esc(item.obra)}</p>
+            <p class="textCardExcerpt">«${esc(item.txt)}»</p>
+            <div class="textCardBottom">
+              <div class="textCardTags">
+                ${item.f.map(k => `<span class="focusTag" title="${esc(F[k] ? F[k][1] : '')}">${esc(F[k] ? F[k][0] : k)}</span>`).join('')}
+              </div>
+              <button class="btn miniBtn biblioPickBtn" data-id="${esc(item.id)}">🎙 Practicar</button>
+            </div>
+          </div>
+        `
+            )
+            .join('');
+    bindPickButtons();
+  }
+}
+
+function bindPickButtons() {
+  document.querySelectorAll('.biblioPickBtn').forEach(b => {
+    b.onclick = () => {
+      const id = b.dataset.id;
+      const item = allTexts().find(t => t.id === id);
+      if (item) {
+        selectedBiblioText = item;
+        offset = 0;
+        result = null;
+        stopModel();
+        go('hoy');
+      }
+    };
+  });
+}
+
+function viewBiblio() {
+  const all = allTexts();
+  const countries = typeof getUniqueCountries === 'function' ? getUniqueCountries(all) : [];
+  const categories =
+    typeof CATEGORIES !== 'undefined'
+      ? CATEGORIES
+      : {
+          todos: 'Todos',
+          literatura: 'Literatura',
+          poesia: 'Poesía',
+          musica: 'Música',
+          'saberes-originarios': 'Saberes originarios',
+          cultura: 'Cultura y Vida',
+          historia: 'Historia y Crónica'
+        };
+
+  const filtered = typeof filterTexts === 'function' ? filterTexts(all, biblioFilter) : all;
+
+  $('#view').innerHTML = `
+  <section class="card biblioCard">
+    <div class="biblioHeader">
+      <div>
+        <p class="eyebrow">Catálogo Cultural Latinoamericano</p>
+        <h2>Biblioteca de Textos</h2>
+        <p class="sub">${all.length} textos y trechos de literatura, poesía, música y saberes originarios clasificados por país y nivel de dificultad.</p>
+      </div>
+    </div>
+
+    <!-- Barra de búsqueda instantánea -->
+    <div class="biblioSearchRow">
+      <input type="search" id="bibQuery" class="bibSearchInput" placeholder="🔍 Buscar por título, autor, país, palabra..." value="${esc(biblioFilter.query)}">
+    </div>
+
+    <!-- Píldoras de categoría -->
+    <div class="catPills" id="catPills">
+      ${Object.entries(categories)
+        .map(([key, label]) => {
+          const count = key === 'todos' ? all.length : all.filter(t => t.categoria === key).length;
+          const active = biblioFilter.category === key;
+          return `<button class="catPill ${active ? 'active' : ''}" data-cat="${esc(key)}">${esc(label)} <span class="pillCount">${count}</span></button>`;
+        })
+        .join('')}
+    </div>
+
+    <!-- Selectores de país y nivel -->
+    <div class="biblioFiltersRow">
+      <div class="filterSelectGroup">
+        <label for="bibCountry">País:</label>
+        <select id="bibCountry" class="bibSelect">
+          <option value="todos" ${biblioFilter.country === 'todos' ? 'selected' : ''}>Todos los países (${countries.length})</option>
+          ${countries
+            .map(
+              c =>
+                `<option value="${esc(c)}" ${biblioFilter.country === c ? 'selected' : ''}>${esc(c)} (${all.filter(t => t.pais === c).length})</option>`
+            )
+            .join('')}
+        </select>
+      </div>
+
+      <div class="filterSelectGroup">
+        <label for="bibLevel">Nivel:</label>
+        <select id="bibLevel" class="bibSelect">
+          <option value="todos" ${biblioFilter.level === 'todos' ? 'selected' : ''}>Todos los niveles (A1 - B2)</option>
+          <option value="A1" ${biblioFilter.level === 'A1' ? 'selected' : ''}>A1 · Principiante (${all.filter(t => t.nivel === 'A1').length})</option>
+          <option value="A2" ${biblioFilter.level === 'A2' ? 'selected' : ''}>A2 · Pre-intermedio (${all.filter(t => t.nivel === 'A2').length})</option>
+          <option value="B1" ${biblioFilter.level === 'B1' ? 'selected' : ''}>B1 · Intermedio (${all.filter(t => t.nivel === 'B1').length})</option>
+          <option value="B2" ${biblioFilter.level === 'B2' ? 'selected' : ''}>B2 · Avanzado (${all.filter(t => t.nivel === 'B2').length})</option>
+        </select>
+      </div>
+
+      ${
+        biblioFilter.category !== 'todos' || biblioFilter.country !== 'todos' || biblioFilter.level !== 'todos' || biblioFilter.query
+          ? `<button class="mini resetFilterBtn" id="resetFilter">↺ Limpiar filtros</button>`
+          : ''
+      }
+    </div>
+
+    <div class="biblioResultsMeta">
+      Mostrando <b>${filtered.length}</b> de <b>${all.length}</b> textos
+    </div>
+
+    <!-- Grid de tarjetas de textos -->
+    <div class="biblioGrid">
+      ${
+        filtered.length === 0
+          ? `<div class="emptyBiblio">No se encontraron textos con los filtros seleccionados. Intenta con otra búsqueda o limpia los filtros.</div>`
+          : filtered
+              .map(
+                item => `
+            <div class="textItemCard">
+              <div class="textCardTop">
+                <span class="badgeLevel lvl-${item.nivel}">${item.nivel}</span>
+                <span class="badgeCat">${esc((item.tema || '').split(' · ')[0] || item.categoria)}</span>
+                <span class="badgeCountry">${esc(item.pais)}</span>
+              </div>
+              <h3 class="textCardTitle">${esc(item.t)}</h3>
+              <p class="textCardObra">📖 ${esc(item.obra)}</p>
+              <p class="textCardExcerpt">«${esc(item.txt)}»</p>
+              <div class="textCardBottom">
+                <div class="textCardTags">
+                  ${item.f.map(k => `<span class="focusTag" title="${esc(F[k] ? F[k][1] : '')}">${esc(F[k] ? F[k][0] : k)}</span>`).join('')}
+                </div>
+                <button class="btn miniBtn biblioPickBtn" data-id="${esc(item.id)}">🎙 Practicar</button>
+              </div>
+            </div>
+          `
+              )
+              .join('')
+      }
+    </div>
+  </section>`;
+
+  const qInput = $('#bibQuery');
+  if (qInput) {
+    qInput.oninput = () => {
+      biblioFilter.query = qInput.value;
+      renderBiblioGridOnly();
+    };
+  }
+
+  document.querySelectorAll('.catPill').forEach(p => {
+    p.onclick = () => {
+      biblioFilter.category = p.dataset.cat;
+      viewBiblio();
+    };
+  });
+
+  const cSelect = $('#bibCountry');
+  if (cSelect) {
+    cSelect.onchange = () => {
+      biblioFilter.country = cSelect.value;
+      viewBiblio();
+    };
+  }
+
+  const lSelect = $('#bibLevel');
+  if (lSelect) {
+    lSelect.onchange = () => {
+      biblioFilter.level = lSelect.value;
+      viewBiblio();
+    };
+  }
+
+  const rBtn = $('#resetFilter');
+  if (rBtn) {
+    rBtn.onclick = () => {
+      biblioFilter = { category: 'todos', country: 'todos', level: 'todos', query: '' };
+      viewBiblio();
+    };
+  }
+
+  bindPickButtons();
 }
 
 function viewHist() {
@@ -2218,7 +2359,7 @@ function go(v) {
   stopModel();
   stopMine();
   document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.v === v));
-  ({ hoy: viewHoy, hist: viewHist, cfg: viewCfg })[v]();
+  ({ hoy: viewHoy, biblio: viewBiblio, hist: viewHist, cfg: viewCfg })[v]();
 }
 
 document.querySelectorAll('.tab').forEach(t => (t.onclick = () => go(t.dataset.v)));

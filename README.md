@@ -2,7 +2,7 @@
 
 Una página web para practicar la pronunciación en español, todos los días, con evaluación real de Azure.
 
-1. La página te muestra un texto diario de literatura latinoamericana, poesía, música o saberes de pueblos originarios.
+1. La página te muestra un texto diario o te permite elegir entre más de 100 textos y trechos de literatura, poesía, música y saberes originarios en la pestaña **«Biblioteca»** (clasificados por país, tópico y nivel de dificultad A1–B2).
 2. Tú lo lees en voz alta y grabas.
 3. Azure evalúa tu pronunciación palabra por palabra.
 4. Ves una nota, las palabras para repetir, y guardas tu audio para comparar tu evolución.
