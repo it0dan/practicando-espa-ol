@@ -83,7 +83,7 @@ Fuente: [precios de Azure Speech](https://azure.microsoft.com/pricing/details/sp
 - La barra se pone **amarilla** desde el 80 % y **roja** al llegar al 100 %.
 - Al llegar al 100 %, la página **no te deja grabar** (o usa la voz del navegador para el modelo) hasta el próximo mes. Puedes cambiar los límites en **Ajustes → Límites del mes**.
 - Los contadores empiezan de cero cada mes calendario.
-- **Es una estimación.** Sin Google Drive, la página solo cuenta lo que usas desde este navegador. Con Drive conectado, suma el uso de todos tus aparatos. Si usas la misma clave desde otra herramienta, ese uso no se ve. Para corregirlo, mira los números reales en el portal de Azure (tu recurso → **Métricas**) y escríbelos en **Ajustes → Corregir el uso de este mes**.
+- **Contabilización automática.** La página cuenta automáticamente cada segundo de micrófono y cada carácter reproducido. Con Google Drive conectado, suma el uso de todos tus aparatos en tiempo real. Los contadores empiezan de cero cada mes calendario.
 - Las voces que ya escuchaste en la misma sesión se guardan en memoria y no vuelven a gastar caracteres.
 
 ---

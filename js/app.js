@@ -1816,21 +1816,14 @@ function viewCfg() {
 
   <section class="card">
     <p class="eyebrow">Control de cuota</p>
-    <h2>Límites mensuales</h2>
-    <p class="muted">El plan Free F0 de Azure incluye 5 horas de evaluación y 500.000 caracteres de voz al mes.</p>
-    <label for="lh">Horas de grabación al mes</label>
+    <h2>Límites del plan gratuito (F0)</h2>
+    <p class="muted">El plan Free F0 de Azure incluye 5 horas de evaluación y 500.000 caracteres de voz al mes. La aplicación contabiliza automáticamente cada segundo grabado y cada carácter reproducido.</p>
+    <label for="lh">Límite de horas de grabación al mes</label>
     <input type="number" id="lh" min="0.1" step="0.5" inputmode="decimal" value="${cfg.limStt}">
-    <label for="lc">Caracteres de voz del modelo al mes</label>
+    <label for="lc">Límite de caracteres de voz al mes</label>
     <input type="number" id="lc" min="1000" step="1000" inputmode="numeric" value="${cfg.limTts}">
-
-    <h3>Ajustar uso del mes actual</h3>
-    <p class="muted" style="font-size:12px">Si utilizas la misma clave en otras herramientas, puedes sincronizar los valores con el portal de Azure.</p>
-    <label for="uh">Horas usadas este mes</label>
-    <input type="number" id="uh" min="0" step="0.01" inputmode="decimal" value="${(uget().stt / 3600).toFixed(2)}">
-    <label for="uc">Caracteres de voz usados</label>
-    <input type="number" id="uc" min="0" step="100" inputmode="numeric" value="${uget().tts}">
     <div class="btns">
-      <button class="btn" id="usave">Actualizar uso</button>
+      <button class="btn" id="usave">Guardar límites</button>
     </div>
     <p id="umsg" style="margin-top:10px"></p>
   </section>
@@ -2029,27 +2022,18 @@ function viewCfg() {
   $('#usave').onclick = () => {
     const lh = parseFloat($('#lh').value),
       lc = parseFloat($('#lc').value),
-      uh = parseFloat($('#uh').value),
-      uc = parseFloat($('#uc').value),
       m = $('#umsg');
-    if (!(lh > 0 && lc > 0 && uh >= 0 && uc >= 0)) {
+    if (!(lh > 0 && lc > 0)) {
       m.className = 'bad-msg';
-      m.textContent = 'Verifica que los números sean válidos.';
+      m.textContent = 'Verifica que los límites sean mayores a cero.';
       return;
     }
     cfg.limStt = lh;
     cfg.limTts = lc;
     LS.set('pron-cfg', cfg);
-    const tot = uget(),
-      me = umine();
-    me.stt = Math.max(0, Math.round(uh * 3600 - (tot.stt - me.stt)));
-    me.tts = Math.max(0, Math.round(uc - (tot.tts - me.tts)));
-    me.t = Date.now();
-    LS.set('pron-usage', usage);
-    syncSoon();
     renderUsage();
     m.className = 'ok-msg';
-    m.textContent = 'Límites y consumo actualizados.';
+    m.textContent = 'Límites actualizados con éxito.';
   };
 
   async function refreshAudioStat() {
