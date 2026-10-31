@@ -1,0 +1,12 @@
+{
+  "name": "practicando-espanol",
+  "version": "1.0.0",
+  "description": "Una aplicación web minimalista para practicar la pronunciación en español",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": ["spanish", "pronunciation", "azure-speech", "github-pages"],
+  "author": "D.aȠ",
+  "license": "MIT"
+}
