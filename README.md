@@ -223,7 +223,8 @@ También puedes tocar **Pegar texto** en la página para leer cualquier texto, p
 | «No se cargó el SDK de Azure» | La página necesita internet para cargar el SDK. |
 | No escucha nada | Habla más cerca del micrófono y haz una pausa corta al empezar. |
 | «Llegaste al límite del mes» | Mira **Ajustes → Límites del mes**. Si el número no coincide con Azure, corrígelo ahí. |
-| No hay audios guardados | Revisa en **Ajustes** que «Guardar mis audios» esté en «Sí». |
+| «No hay audios guardados» | Revisa en **Ajustes** que «Guardar mis audios» esté en «Sí». |
+| «Error 403: access_denied (Acesso bloqueado)» | En Google Cloud Console, ve a **Pantalla de consentimiento de OAuth → Usuarios de prueba** y agrega tu correo de Gmail (`it.daniloamaral@gmail.com`). Guarda y vuelve a intentar. |
 
 ---
 
