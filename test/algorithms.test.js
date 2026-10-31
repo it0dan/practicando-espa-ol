@@ -169,6 +169,61 @@ test('mergeData: une históricos de dispositivos distintos sem duplicação', ()
   assert.equal(merged.usage['2026-10'].devB.stt, 45);
 });
 
+const F = {
+  j: ['J / G (ge, gi)', 'Sonido fuerte, desde la garganta.'],
+  rr: ['RR / R inicial', 'La lengua vibra varias veces.']
+};
+
+function diagnoseScore(r, cur) {
+  const weakWords = r.words.filter(w => w.st === 'miss' || w.sc < 70);
+  const okWords = r.words.filter(w => w.st === 'ok' && w.sc >= 80);
+  const subWords = r.words.filter(w => w.st === 'sub');
+  const missWords = r.words.filter(w => w.st === 'miss');
+
+  let accWhy = '';
+  if (r.acc >= 85) {
+    accWhy = `Excelente articulación fonética (${r.acc}/100). Pronunciaste claramente ${okWords.length} de ${r.words.length} palabras.`;
+  } else if (r.acc >= 70) {
+    accWhy = `Buena articulación general (${r.acc}/100), pero ${weakWords.length} palabra(s) bajaron la media: ${weakWords.map(w => w.t + ' (' + (w.st === 'miss' ? 'no detectada' : w.sc + '/100') + ')').join(', ')}.`;
+  } else {
+    accWhy = `La precisión fue baja (${r.acc}/100) debido a discrepancias acústicas en ${weakWords.length} palabra(s), en especial: ${weakWords.slice(0, 4).map(w => w.t + ' (' + (w.st === 'miss' ? 'no detectada' : w.sc + '/100') + ')').join(', ')}.`;
+  }
+  if (subWords.length) {
+    accWhy += ` Además, el reconocedor escuchó palabras distintas a las esperadas: ${subWords.map(w => `dijiste «${w.heard}» por «${w.t}»`).join(', ')}.`;
+  }
+
+  let fluWhy = '';
+  if (r.flu >= 85) {
+    fluWhy = `Cadencia natural y continua (${r.flu}/100). Mantuviste un ritmo de lectura parejo, con pausas adecuadas en comas y puntos.`;
+  } else if (r.flu >= 70) {
+    fluWhy = `Ritmo comprensible (${r.flu}/100), pero con pequeñas vacilaciones o pausas antes de palabras complejas.`;
+  } else {
+    fluWhy = `Fluidez reducida (${r.flu}/100). Se detectaron pausas prolongadas o lectura silábica/entrecortada. Practica leer oraciones completas de corrido.`;
+  }
+
+  let compWhy = '';
+  if (r.comp >= 99) {
+    compWhy = `Completitud del 100%. Leíste todas las ${r.words.length} palabras del texto sin omitir ninguna.`;
+  } else {
+    compWhy = `Completitud del ${r.comp}%. Faltaron ${missWords.length} palabra(s) por leer o no llegaron a captarse por el micrófono: ${missWords.map(w => w.t).join(', ')}.`;
+  }
+
+  let extraWhy = '';
+  if (r.extra && r.extra.length) {
+    extraWhy = `Se registraron palabras o sonidos añadidos que no estaban en la lectura original: ${r.extra.join(', ')}.`;
+  }
+
+  let tipWhy = '';
+  if (cur && cur.f && cur.f.length) {
+    const focusItems = cur.f.filter(k => F[k]).map(k => `<b>${F[k][0]}:</b> ${F[k][1]}`);
+    if (focusItems.length) {
+      tipWhy = focusItems.join('<br>');
+    }
+  }
+
+  return { accWhy, fluWhy, compWhy, extraWhy, tipWhy };
+}
+
 test('mergeData: propaga exclusão de áudio (tombstone adel)', () => {
   const deviceA = {
     hist: [{ id: '1', ts: 100, t: 'Texto 1', hasAudio: true }],
@@ -181,4 +236,42 @@ test('mergeData: propaga exclusão de áudio (tombstone adel)', () => {
   const merged = mergeData(deviceA, deviceB);
   assert.equal(merged.hist.length, 1);
   assert.equal(merged.hist[0].hasAudio, false);
+});
+
+test('diagnoseScore: gera explicabilidade clara para precisão, fluidez e completude', () => {
+  const result = {
+    acc: 68,
+    flu: 62,
+    comp: 80,
+    nota: 69,
+    words: [
+      { t: 'Hoy', st: 'ok', sc: 90 },
+      { t: 'trabajando', st: 'ok', sc: 55 },
+      { t: 'en', st: 'sub', sc: 45, heard: 'el' },
+      { t: 'mi', st: 'miss', sc: 0 },
+      { t: 'casa', st: 'ok', sc: 85 }
+    ],
+    extra: ['eh']
+  };
+  const cur = { f: ['j', 'rr'] };
+
+  const diag = diagnoseScore(result, cur);
+  
+  // Precisión explica as palavras problemáticas e substituição
+  assert.match(diag.accWhy, /La precisión fue baja/);
+  assert.match(diag.accWhy, /trabajando/);
+  assert.match(diag.accWhy, /dijiste «el» por «en»/);
+
+  // Fluidez explica as pausas/ritmo
+  assert.match(diag.fluWhy, /Fluidez reducida/);
+
+  // Completitud explica a omissão
+  assert.match(diag.compWhy, /Faltaron 1 palabra/);
+  assert.match(diag.compWhy, /mi/);
+
+  // Palavras extras
+  assert.match(diag.extraWhy, /eh/);
+
+  // Dica fonética
+  assert.match(diag.tipWhy, /J \/ G/);
 });

@@ -1319,9 +1319,66 @@ function bindWords() {
   });
 }
 
+function diagnoseScore(r, cur) {
+  const weakWords = r.words.filter(w => w.st === 'miss' || w.sc < 70);
+  const okWords = r.words.filter(w => w.st === 'ok' && w.sc >= 80);
+  const subWords = r.words.filter(w => w.st === 'sub');
+  const missWords = r.words.filter(w => w.st === 'miss');
+
+  // 1. Explicabilidad de Precisión (60% de la nota)
+  let accWhy = '';
+  if (r.acc >= 85) {
+    accWhy = `Excelente articulación fonética (${r.acc}/100). Pronunciaste claramente ${okWords.length} de ${r.words.length} palabras.`;
+  } else if (r.acc >= 70) {
+    accWhy = `Buena articulación general (${r.acc}/100), pero ${weakWords.length} palabra(s) bajaron la media: ${weakWords.map(w => w.t + ' (' + (w.st === 'miss' ? 'no detectada' : w.sc + '/100') + ')').join(', ')}.`;
+  } else {
+    accWhy = `La precisión fue baja (${r.acc}/100) debido a discrepancias acústicas en ${weakWords.length} palabra(s), en especial: ${weakWords.slice(0, 4).map(w => w.t + ' (' + (w.st === 'miss' ? 'no detectada' : w.sc + '/100') + ')').join(', ')}.`;
+  }
+  if (subWords.length) {
+    accWhy += ` Además, el reconocedor escuchó palabras distintas a las esperadas: ${subWords.map(w => `dijiste «${w.heard}» por «${w.t}»`).join(', ')}.`;
+  }
+
+  // 2. Explicabilidad de Fluidez (20% de la nota)
+  let fluWhy = '';
+  if (r.flu >= 85) {
+    fluWhy = `Cadencia natural y continua (${r.flu}/100). Mantuviste un ritmo de lectura parejo, con pausas adecuadas en comas y puntos.`;
+  } else if (r.flu >= 70) {
+    fluWhy = `Ritmo comprensible (${r.flu}/100), pero con pequeñas vacilaciones o pausas antes de palabras complejas.`;
+  } else {
+    fluWhy = `Fluidez reducida (${r.flu}/100). Se detectaron pausas prolongadas o lectura silábica/entrecortada. Practica leer oraciones completas de corrido.`;
+  }
+
+  // 3. Explicabilidad de Completitud (20% de la nota)
+  let compWhy = '';
+  if (r.comp >= 99) {
+    compWhy = `Completitud del 100%. Leíste todas las ${r.words.length} palabras del texto sin omitir ninguna.`;
+  } else {
+    compWhy = `Completitud del ${r.comp}%. Faltaron ${missWords.length} palabra(s) por leer o no llegaron a captarse por el micrófono: ${missWords.map(w => w.t).join(', ')}.`;
+  }
+
+  // 4. Sonidos / Palabras extra
+  let extraWhy = '';
+  if (r.extra && r.extra.length) {
+    extraWhy = `Se registraron palabras o sonidos añadidos que no estaban en la lectura original: ${r.extra.join(', ')}.`;
+  }
+
+  // 5. Consejos fonéticos para brasileños
+  let tipWhy = '';
+  if (cur && cur.f && cur.f.length) {
+    const focusItems = cur.f.filter(k => F[k]).map(k => `<b>${esc(F[k][0])}:</b> ${esc(F[k][1])}`);
+    if (focusItems.length) {
+      tipWhy = focusItems.join('<br>');
+    }
+  }
+
+  return { accWhy, fluWhy, compWhy, extraWhy, tipWhy };
+}
+
 function renderResult() {
   if (!result) return;
   const r = result;
+  const cur = currentText();
+  const diag = diagnoseScore(r, cur);
   $('#reading').innerHTML = readingHTML(r.txt, r.words);
   bindWords();
 
@@ -1357,11 +1414,44 @@ function renderResult() {
       <span class="l3">Atención (&lt;60)</span>
       <span class="l4">No detectada</span>
     </div>
+
+    <!-- Explicabilidad de los Parámetros y la Nota -->
+    <div class="diagCard">
+      <h4>¿Por qué obtuviste esta nota?</h4>
+      <div class="diagItem">
+        <div class="diagHead">Precisión <span>${r.acc}/100 · peso 60%</span></div>
+        <p>${diag.accWhy}</p>
+      </div>
+      <div class="diagItem">
+        <div class="diagHead">Fluidez <span>${r.flu}/100 · peso 20%</span></div>
+        <p>${diag.fluWhy}</p>
+      </div>
+      <div class="diagItem">
+        <div class="diagHead">Completitud <span>${r.comp}% · peso 20%</span></div>
+        <p>${diag.compWhy}</p>
+      </div>
+      ${
+        diag.extraWhy
+          ? `<div class="diagItem">
+               <div class="diagHead">Palabras añadidas</div>
+               <p>${diag.extraWhy}</p>
+             </div>`
+          : ''
+      }
+      ${
+        diag.tipWhy
+          ? `<div class="diagTip">
+               <div style="font-weight:600; color:var(--text); margin-bottom:4px">Consejos fonéticos clave para este texto:</div>
+               <div>${diag.tipWhy}</div>
+             </div>`
+          : ''
+      }
+    </div>
     
-    <details class="how">
-      <summary>¿Cómo se calcula la nota?</summary>
+    <details class="how" style="margin-top:14px">
+      <summary>¿Cómo se calculan las notas?</summary>
       <p><b>Azure Speech:</b> evalúa la acústica de tu voz para cada fonema y palabra, además del ritmo (fluidez).</p>
-      <p><b>Ponderación:</b> 60% precisión + 20% fluidez + 20% completitud del texto.</p>
+      <p><b>Fórmula final:</b> 60% precisión + 20% fluidez + 20% completitud del texto.</p>
     </details>
     
     <p class="muted" style="font-size:13px; margin-top:14px">Toca cualquier palabra del texto para ver su desglose fonético y escucharla despacio.</p>
@@ -1472,15 +1562,21 @@ function showWord() {
 
 function copySummary() {
   const r = result;
+  const cur = currentText();
+  const diag = diagnoseScore(r, cur);
   const bad = r.words
     .filter(w => w.st !== 'ok' || w.sc < 70)
     .map(w => (w.st === 'miss' ? `${w.t} (no se oyó)` : w.st === 'sub' ? `${w.t} (se oyó «${w.heard}», ${w.sc})` : `${w.t} (${w.sc})`));
+  const cleanHtml = s => s.replace(/<[^>]+>/g, '').trim();
   const txt = `Práctica de pronunciación · ${today()} · Acento: ${cfg.lang}
 Texto: «${r.title}»
-Nota: ${r.nota} · Precisión: ${r.acc} · Fluidez: ${r.flu} · Completo: ${r.comp}
-Palabras para practicar: ${bad.length ? bad.join(', ') : 'Ninguna (¡perfecto!)'}${
-    r.extra.length ? `\nPalabras de más: ${r.extra.join(', ')}` : ''
-  }`;
+Nota Final: ${r.nota}/100
+- Precisión: ${r.acc}/100 (60%) -> ${cleanHtml(diag.accWhy)}
+- Fluidez: ${r.flu}/100 (20%) -> ${cleanHtml(diag.fluWhy)}
+- Completitud: ${r.comp}% (20%) -> ${cleanHtml(diag.compWhy)}${
+    diag.extraWhy ? '\n- ' + cleanHtml(diag.extraWhy) : ''
+  }
+Palabras para practicar: ${bad.length ? bad.join(', ') : 'Ninguna (¡perfecto!)'}`;
   const done = () => {
     $('#copied').textContent = 'Copiado al portapapeles con éxito.';
   };
@@ -1684,24 +1780,13 @@ function viewCfg() {
       <button class="btn alt" id="ctest">Probar conexión</button>
     </div>
     <p id="cmsg" style="margin-top:10px"></p>
-  </section>
-
-  <section class="card">
-    <p class="eyebrow">Guía rápida</p>
-    <h2>Cómo obtener la clave gratis</h2>
-    <ol class="steps">
-      <li>Inicia sesión en <code>portal.azure.com</code>.</li>
-      <li>Busca y crea un recurso <b>Speech</b> (Servicios de voz).</li>
-      <li>Elige el plan gratuito: <b>Free F0</b>.</li>
-      <li>Elige una región cercana (ej: <code>brazilsouth</code>).</li>
-      <li>Entra al recurso → «Claves y punto de conexión» → copia <b>Key 1</b>.</li>
-    </ol>
+    <p class="muted" style="font-size:12px; margin-top:12px">El paso a paso para crear tu recurso gratis en Azure y obtener tu clave está en el <a href="README.md#paso-1-crear-la-clave-en-azure" target="_blank" style="color:var(--cyan); text-decoration:underline">README.md</a>.</p>
   </section>
 
   <section class="card">
     <p class="eyebrow">Sincronización</p>
     <h2>Google Drive (Opcional)</h2>
-    ${clientId() ? '' : '<p class="bad-msg">Falta configurar el Client ID de Google para activar la sincronización entre dispositivos.</p>'}
+    ${clientId() ? '' : '<p class="bad-msg">Falta configurar el Client ID de Google para activar la sincronización entre dispositivos. Consulta el <a href="README.md#para-quien-publica-la-página-crear-el-client-id-de-google" target="_blank" style="color:var(--cyan); text-decoration:underline">README.md</a> para el paso a paso.</p>'}
     <p class="muted">Tu historial y grabaciones se respaldan en una carpeta oculta de tu propio Google Drive (<code>appDataFolder</code>).</p>
     <div class="btns">
       <button class="btn" id="gconn">Conectar y sincronizar</button>
