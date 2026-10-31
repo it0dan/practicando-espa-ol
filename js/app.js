@@ -1786,32 +1786,51 @@ function viewCfg() {
   <section class="card">
     <p class="eyebrow">Sincronización</p>
     <h2>Google Drive (Opcional)</h2>
-    ${clientId() ? '' : '<p class="bad-msg">Falta configurar el Client ID de Google para activar la sincronización entre dispositivos. Consulta el <a href="README.md#para-quien-publica-la-página-crear-el-client-id-de-google" target="_blank" style="color:var(--cyan); text-decoration:underline">README.md</a> para el paso a paso.</p>'}
-    <p class="muted">Tu historial y grabaciones se respaldan en una carpeta oculta de tu propio Google Drive (<code>appDataFolder</code>).</p>
-    <div class="btns">
-      <button class="btn" id="gconn">Conectar y sincronizar</button>
-      <button class="btn alt" id="gdisc">Desconectar</button>
-    </div>
-    <p id="gmsg" style="margin-top:10px"></p>
+    <p class="muted">Permite sincronizar tus lecturas, notas y grabaciones entre dispositivos usando tu propio Google Drive (carpeta oculta privada <code>appDataFolder</code>).</p>
+    
+    ${
+      !clientId()
+        ? `
+      <div style="background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-md); padding:16px; margin:16px 0">
+        <div style="font-weight:600; color:var(--text); margin-bottom:6px">Paso 1: Ingresar tu Client ID de Google</div>
+        <p class="muted" style="font-size:13px; margin:0 0 12px">Para conectar con Google Drive directamente desde el navegador, se requiere un Client ID de OAuth2 (gratuito). Consulta el <a href="README.md#paso-1-crear-el-client-id-de-google-se-hace-una-sola-vez" target="_blank" style="color:var(--cyan); text-decoration:underline">paso a paso en el README</a> para generarlo en Google Cloud Console.</p>
+        <label for="gci" style="margin-top:0">Client ID de Google</label>
+        <input type="text" id="gci" value="${esc(meta.clientId || '')}" placeholder="ej: 123456789-xxxx.apps.googleusercontent.com" autocomplete="off" spellcheck="false">
+        <div class="btns" style="margin-top:10px">
+          <button class="btn" id="gcis">Guardar y habilitar sincronización</button>
+        </div>
+        <p id="gmsg3" style="margin-top:8px"></p>
+      </div>`
+        : `
+      <div class="btns">
+        <button class="btn" id="gconn">Conectar y sincronizar</button>
+        <button class="btn alt" id="gdisc">Desconectar</button>
+      </div>
+      <p id="gmsg" style="margin-top:10px"></p>
 
-    <h3>Cifrado de clave en la nube</h3>
-    <p class="muted">La clave se envía cifrada con contraseña mediante AES-GCM-256 (PBKDF2).</p>
-    <label for="gp">Contraseña de cifrado (mínimo 8 caracteres)</label>
-    <input type="password" id="gp" autocomplete="new-password" placeholder="Tu contraseña privada">
-    <div class="btns">
-      <button class="btn alt" id="gsave">Guardar clave cifrada</button>
-      <button class="btn alt" id="gload">Traer mi clave</button>
-    </div>
-    <p id="gmsg2" style="margin-top:10px"></p>
+      <h3>Transferir clave de Azure a otros dispositivos</h3>
+      <p class="muted">Guarda tu clave de Azure cifrada en Drive con una contraseña personal (AES-GCM-256) para recuperarla en tu celular sin copiarla a mano.</p>
+      <label for="gp">Contraseña de cifrado (mínimo 8 caracteres)</label>
+      <input type="password" id="gp" autocomplete="new-password" placeholder="Tu contraseña privada">
+      <div class="btns">
+        <button class="btn alt" id="gsave">Guardar clave cifrada</button>
+        <button class="btn alt" id="gload">Traer mi clave</button>
+      </div>
+      <p id="gmsg2" style="margin-top:10px"></p>
 
-    <h3>Avanzado</h3>
-    <label for="gci">Client ID de Google</label>
-    <input type="text" id="gci" value="${esc(meta.clientId || '')}" placeholder="${esc(GOOGLE_CLIENT_ID || 'xxxx.apps.googleusercontent.com')}" autocomplete="off" spellcheck="false">
-    <div class="btns">
-      <button class="btn alt" id="gcis">Guardar Client ID</button>
-      <button class="btn alt" id="gwipe">Borrar datos de Drive</button>
-    </div>
-    <p id="gmsg3" style="margin-top:10px"></p>
+      <details style="margin-top:20px; font-size:13px; color:var(--muted)">
+        <summary style="cursor:pointer; color:var(--cyan); font-weight:500">Configuración avanzada de Drive</summary>
+        <div style="margin-top:10px">
+          <label for="gci">Client ID de Google actual</label>
+          <input type="text" id="gci" value="${esc(meta.clientId || '')}" placeholder="${esc(GOOGLE_CLIENT_ID || 'xxxx.apps.googleusercontent.com')}" autocomplete="off" spellcheck="false">
+          <div class="btns" style="margin-top:10px">
+            <button class="btn alt" id="gcis">Actualizar Client ID</button>
+            <button class="btn alt" id="gwipe">Borrar datos de Drive</button>
+          </div>
+          <p id="gmsg3" style="margin-top:10px"></p>
+        </div>
+      </details>`
+    }
   </section>
 
   <section class="card">
@@ -1906,118 +1925,138 @@ function viewCfg() {
     e.textContent = t;
   };
 
-  $('#gconn').onclick = async () => {
-    gm('#gmsg', true, 'Conectando con Google…');
-    await syncNow(true);
-    gm('#gmsg', syncState.st !== 'err', syncState.st === 'err' ? syncState.msg : 'Sincronización completada.');
-  };
+  const gconn = $('#gconn');
+  if (gconn) {
+    gconn.onclick = async () => {
+      gm('#gmsg', true, 'Conectando con Google…');
+      await syncNow(true);
+      gm('#gmsg', syncState.st !== 'err', syncState.st === 'err' ? syncState.msg : 'Sincronización completada.');
+    };
+  }
 
-  $('#gdisc').onclick = () => {
-    try {
-      if (tok && window.google && google.accounts && google.accounts.oauth2.revoke) {
-        google.accounts.oauth2.revoke(tok.access_token, () => {});
-      }
-    } catch (e) {}
-    tok = null;
-    meta.connected = false;
-    saveMeta();
-    syncNote = '';
-    setSync('off', '');
-    gm('#gmsg', true, 'Desconectado de Google Drive. Los datos locales permanecen intactos.');
-  };
-
-  $('#gcis').onclick = () => {
-    meta.clientId = $('#gci').value.trim();
-    saveMeta();
-    tok = null;
-    renderCloud();
-    gm('#gmsg3', true, 'Client ID guardado.');
-  };
-
-  armBtn($('#gwipe'), async () => {
-    try {
-      await getToken(true);
-      const files = await driveList();
-      for (const n in files) await driveDel(files[n].id);
-      meta.lastSync = 0;
-      saveMeta();
-      renderCloud();
-      gm('#gmsg3', true, 'Datos de Google Drive eliminados.');
-    } catch (e) {
-      gm('#gmsg3', false, e.message);
-    }
-  });
-
-  $('#gsave').onclick = async () => {
-    const pw = $('#gp').value,
-      m = '#gmsg2';
-    if (pw.length < 8) {
-      gm(m, false, 'La contraseña debe tener al menos 8 caracteres.');
-      return;
-    }
-    const c = Object.assign({}, cfg, read());
-    if (!c.key) {
-      gm(m, false, 'Ingresa tu clave de Azure primero.');
-      return;
-    }
-    try {
-      gm(m, true, 'Cifrando credenciales…');
-      const env = await encJSON(
-        {
-          key: c.key,
-          region: c.region,
-          lang: c.lang,
-          voice: c.voice,
-          saveAudio: c.saveAudio,
-          limStt: c.limStt,
-          limTts: c.limTts
-        },
-        pw
-      );
-      await getToken(true);
-      const files = await driveList();
-      await drivePut('config.enc.json', new Blob([JSON.stringify(env)], { type: 'application/json' }), 'application/json', files['config.enc.json']);
-      gm(m, true, 'Clave cifrada y guardada en tu Google Drive.');
-    } catch (e) {
-      gm(m, false, e.message || 'No se pudo guardar la clave.');
-    }
-  };
-
-  $('#gload').onclick = async () => {
-    const pw = $('#gp').value,
-      m = '#gmsg2';
-    if (!pw) {
-      gm(m, false, 'Ingresa tu contraseña de descifrado.');
-      return;
-    }
-    try {
-      gm(m, true, 'Buscando en Drive…');
-      await getToken(true);
-      const files = await driveList();
-      if (!files['config.enc.json']) {
-        gm(m, false, 'No hay ninguna clave guardada en Drive.');
-        return;
-      }
-      const env = await driveGet(files['config.enc.json'].id, 'json');
-      let c;
+  const gdisc = $('#gdisc');
+  if (gdisc) {
+    gdisc.onclick = () => {
       try {
-        c = await decJSON(env, pw);
+        if (tok && window.google && google.accounts && google.accounts.oauth2.revoke) {
+          google.accounts.oauth2.revoke(tok.access_token, () => {});
+        }
+      } catch (e) {}
+      tok = null;
+      meta.connected = false;
+      saveMeta();
+      syncNote = '';
+      setSync('off', '');
+      gm('#gmsg', true, 'Desconectado de Google Drive. Los datos locales permanecen intactos.');
+    };
+  }
+
+  const gcis = $('#gcis');
+  if (gcis) {
+    gcis.onclick = () => {
+      const elGci = $('#gci');
+      if (elGci) meta.clientId = elGci.value.trim();
+      saveMeta();
+      tok = null;
+      renderCloud();
+      viewCfg();
+      gm('#gmsg', true, 'Client ID guardado con éxito.');
+    };
+  }
+
+  const gwipe = $('#gwipe');
+  if (gwipe) {
+    armBtn(gwipe, async () => {
+      try {
+        await getToken(true);
+        const files = await driveList();
+        for (const n in files) await driveDel(files[n].id);
+        meta.lastSync = 0;
+        saveMeta();
+        renderCloud();
+        gm('#gmsg3', true, 'Datos de Google Drive eliminados.');
       } catch (e) {
-        gm(m, false, 'Contraseña incorrecta.');
+        gm('#gmsg3', false, e.message);
+      }
+    });
+  }
+
+  const gsave = $('#gsave');
+  if (gsave) {
+    gsave.onclick = async () => {
+      const pw = $('#gp').value,
+        m = '#gmsg2';
+      if (pw.length < 8) {
+        gm(m, false, 'La contraseña debe tener al menos 8 caracteres.');
         return;
       }
-      cfg = Object.assign({}, cfg, c);
-      LS.set('pron-cfg', cfg);
-      pickVoice();
-      syncNote = '';
-      renderCloud();
-      renderUsage();
-      viewCfg();
-      gm('#gmsg2', true, '¡Listo! Tu clave se recuperó y guardó en este dispositivo.');
-    } catch (e) {
-      gm(m, false, e.message || 'Error al obtener la clave.');
-    }
-  };
+      const c = Object.assign({}, cfg, read());
+      if (!c.key) {
+        gm(m, false, 'Ingresa tu clave de Azure primero.');
+        return;
+      }
+      try {
+        gm(m, true, 'Cifrando credenciales…');
+        const env = await encJSON(
+          {
+            key: c.key,
+            region: c.region,
+            lang: c.lang,
+            voice: c.voice,
+            saveAudio: c.saveAudio,
+            limStt: c.limStt,
+            limTts: c.limTts
+          },
+          pw
+        );
+        await getToken(true);
+        const files = await driveList();
+        await drivePut('config.enc.json', new Blob([JSON.stringify(env)], { type: 'application/json' }), 'application/json', files['config.enc.json']);
+        gm(m, true, 'Clave cifrada y guardada en tu Google Drive.');
+      } catch (e) {
+        gm(m, false, e.message || 'No se pudo guardar la clave.');
+      }
+    };
+  }
+
+  const gload = $('#gload');
+  if (gload) {
+    gload.onclick = async () => {
+      const pw = $('#gp').value,
+        m = '#gmsg2';
+      if (!pw) {
+        gm(m, false, 'Ingresa tu contraseña de descifrado.');
+        return;
+      }
+      try {
+        gm(m, true, 'Buscando en Drive…');
+        await getToken(true);
+        const files = await driveList();
+        if (!files['config.enc.json']) {
+          gm(m, false, 'No hay ninguna clave guardada en Drive.');
+          return;
+        }
+        const env = await driveGet(files['config.enc.json'].id, 'json');
+        let c;
+        try {
+          c = await decJSON(env, pw);
+        } catch (e) {
+          gm(m, false, 'Contraseña incorrecta.');
+          return;
+        }
+        cfg = Object.assign({}, cfg, c);
+        LS.set('pron-cfg', cfg);
+        pickVoice();
+        syncNote = '';
+        renderCloud();
+        renderUsage();
+        viewCfg();
+        gm('#gmsg2', true, '¡Listo! Tu clave se recuperó y guardó en este dispositivo.');
+      } catch (e) {
+        gm(m, false, e.message || 'Error al obtener la clave.');
+      }
+    };
+  }
 
   $('#usave').onclick = () => {
     const lh = parseFloat($('#lh').value),

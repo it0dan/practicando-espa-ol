@@ -90,54 +90,72 @@ Fuente: [precios de Azure Speech](https://azure.microsoft.com/pricing/details/sp
 
 ## Sincronizar entre aparatos (Google Drive, opcional)
 
-Si usas la página en el celular y en una o más computadoras, puedes tener el mismo historial, los mismos audios y el mismo contador de uso en todos.
+Si usas la página en el celular y en la computadora, puedes tener el mismo historial, los mismos audios y las mismas estadísticas en todos tus dispositivos.
 
-**Qué se guarda y dónde**
-
-Todo va a una **carpeta oculta de tu propio Google Drive**, reservada para esta página. Solo tu cuenta de Google la ve. No hay ningún servidor del proyecto. La página pide un único permiso (`drive.appdata`): no puede ver el resto de tus archivos.
+Todo va a una **carpeta oculta de tu propio Google Drive** (`appDataFolder`), reservada exclusivamente para esta página. Solo tu cuenta de Google tiene acceso; no hay servidores intermediarios.
 
 | Archivo en Drive | Contenido |
 |---|---|
 | `data.json` | Historial de lecturas y contador de uso |
-| `a-<id>` (uno por lectura) | Tus audios |
-| `config.enc.json` | Tu clave de Azure y tus ajustes, **cifrados** (opcional) |
-
-**Cómo usarlo**
-
-1. En el primer aparato: **Ajustes → Google Drive → Conectar y sincronizar**. Entra con tu cuenta de Google y acepta el permiso.
-2. Para llevar tu clave a otros aparatos: escribe una **contraseña de cifrado** (mínimo 8 caracteres) y toca **Guardar clave cifrada**.
-3. En cada aparato nuevo: **Conectar y sincronizar**, y luego escribe la contraseña y toca **Traer mi clave**. Ya no tienes que copiar la clave de Azure a mano.
-
-**Cómo funciona**
-
-- **La clave se cifra en tu navegador** (AES-GCM de 256 bits, con la contraseña pasada por PBKDF2 de 250 000 vueltas) antes de salir. Google solo recibe datos cifrados. Si olvidas la contraseña, no hay forma de recuperar la clave: tendrás que pegarla de nuevo desde Azure.
-- **El uso se suma por aparato.** El total del mes es la suma de todos tus aparatos conectados.
-- **Los borrados se propagan.** Si borras un audio o el historial en un aparato, desaparece en los demás.
-- **Dos aparatos nunca pisan los datos del otro.** Las lecturas se juntan, no se reemplazan.
-- **Los audios de otros aparatos se bajan cuando los escuchas**, para no llenar el celular.
-- **Una vez por visita, toca «Reconectar».** El permiso de Google dura cerca de una hora y esta página no tiene servidor para renovarlo sola. Después de reconectar, los cambios se sincronizan solos.
-- **Desconectar** quita el permiso y deja tus datos locales. **Borrar mis datos de Drive** vacía la carpeta (dos toques para confirmar).
-
-Si la página no muestra la fila «Drive», quien la publicó no configuró el Client ID de Google. Todo funciona igual, pero cada aparato guarda sus datos por separado.
+| `a-<id>` (uno por lectura) | Tus grabaciones de audio |
+| `config.enc.json` | Tu clave de Azure cifrada con contraseña privada (opcional) |
 
 ---
 
-## Para quien publica la página: crear el Client ID de Google
+### Paso 1: Crear el Client ID de Google (se hace una sola vez)
 
-El Client ID **no es un secreto** (cualquiera lo ve en el código de la página). No se usa ningún «client secret». Solo se hace una vez.
+Para que el navegador pueda hablar directamente con tu Google Drive sin servidores de por medio, Google exige un **Client ID de OAuth (Web)**. Es gratuito y no es un secreto (es un identificador público, no usa ningún «client secret»).
 
-1. Entra en <https://console.cloud.google.com> y crea un proyecto (por ejemplo, `pronunciacion-diaria`).
-2. **APIs y servicios → Biblioteca** → busca **Google Drive API** → **Habilitar**.
-3. Configura la **pantalla de consentimiento** (puede llamarse *Google Auth Platform*):
+1. Entra en <https://console.cloud.google.com> con tu cuenta de Google.
+2. Crea un proyecto nuevo (por ejemplo: `pronunciacion-espanol`).
+3. En el menú lateral: **APIs y servicios** → **Biblioteca** → busca **Google Drive API** → haz clic en **Habilitar**.
+4. Ve a **Pantalla de consentimiento de OAuth** (o *Google Auth Platform*):
    - Tipo de usuario: **Externo**.
-   - Nombre de la app y tu correo de contacto.
-   - **Permisos (scopes):** agrega `.../auth/drive.appdata`.
-   - Mientras la app esté en modo **Prueba**, solo pueden entrar los correos que agregues en **Usuarios de prueba**. Para que cualquier persona pueda usarla, pásala a **Producción**. Ese permiso no debería pedir verificación de Google, pero confirma lo que te indique la consola.
-4. **Credenciales → Crear credenciales → ID de cliente de OAuth** → tipo **Aplicación web**.
-5. En **Orígenes autorizados de JavaScript**, agrega la dirección de tu página, solo el origen y sin ruta. Por ejemplo: `https://TU-USUARIO.github.io`
-6. Crea y copia el **ID de cliente** (termina en `.apps.googleusercontent.com`).
-7. Pégalo en `js/app.js`, en la línea `const GOOGLE_CLIENT_ID='';` y publica de nuevo.
-   Para probar sin editar el archivo, también puedes pegarlo en **Ajustes → Google Drive → Avanzado**.
+   - Completa el nombre de la app (ej: `Pronunciación diaria`) y tu correo electrónico de contacto.
+   - En **Permisos (Scopes)**: agrega `https://www.googleapis.com/auth/drive.appdata` (acceso únicamente a la carpeta oculta de la app, sin ver tus demás archivos).
+   - En **Usuarios de prueba**: añade tu propio correo de Gmail para poder entrar mientras esté en modo prueba (o pásala a *Producción* para cualquier usuario).
+5. Ve a **Credenciales** → **Crear credenciales** → **ID de cliente de OAuth**:
+   - Tipo de aplicación: **Aplicación web**.
+   - Nombre: `Pronunciación diaria`.
+   - **Orígenes autorizados de JavaScript**: escribe la dirección exacta de tu GitHub Pages, **solo el dominio, sin ruta ni barra final**.  
+     Por ejemplo: `https://it0dan.github.io`
+6. Haz clic en **Crear** y copia el **ID de cliente** generado (termina en `.apps.googleusercontent.com`).
+
+---
+
+### Paso 2: Configurar el Client ID en la aplicación
+
+Tienes dos formas de activarlo:
+
+* **Opción A (Recomendada para tu propio GitHub Pages):**  
+  Abre `js/app.js`, busca la línea:
+  ```javascript
+  const GOOGLE_CLIENT_ID = '';
+  ```
+  Pega tu Client ID entre las comillas (ej: `const GOOGLE_CLIENT_ID = '123456789.apps.googleusercontent.com';`), haz `git commit` y `git push`. Así quedará activo para siempre en todos tus aparatos sin tener que escribirlo de nuevo.
+
+* **Opción B (Directamente en la página):**  
+  En la página web, ve a la pestaña **Ajustes** → **Google Drive**, pega el Client ID en el campo correspondiente y haz clic en **Guardar Client ID**.
+
+---
+
+### Paso 3: Conectar y sincronizar
+
+1. En tu primer aparato: entra en **Ajustes** → **Google Drive** → toca **Conectar y sincronizar**. Selecciona tu cuenta de Google y concede el permiso.
+2. Para transferir tu clave de Azure a otros dispositivos sin copiarla a mano:
+   - En **Mi clave de Azure en Drive**: escribe una contraseña privada (mínimo 8 caracteres) y toca **Guardar clave cifrada** (se cifra en tu navegador con AES-GCM-256).
+3. En cada nuevo aparato (ej: tu celular):
+   - Entra en **Ajustes** → **Google Drive** → toca **Conectar y sincronizar**.
+   - Escribe la contraseña que elegiste y toca **Traer mi clave**. ¡Listo! Tu historial, audios y clave se sincronizan automáticamente.
+
+---
+
+### Cómo funciona la sincronización
+
+- **Cifrado local**: Tu clave de Azure se cifra en el navegador con PBKDF2 (250.000 iteraciones) y AES-GCM-256 antes de salir hacia Google. Si olvidas la contraseña, la clave no puede recuperarse: tendrías que volver a pegarla desde Azure.
+- **Sin pérdida de datos**: Dos aparatos nunca sobrescriben el historial del otro; las lecturas se unen automáticamente (`merge`).
+- **Descarga bajo demanda**: Los audios grabados en la computadora solo se descargan en el celular cuando tocas reproducir, ahorrando almacenamiento y datos móviles.
+- **Sesión de Google**: El token de Google dura 1 hora. Si vence, la barra superior muestra *"Drive desconectado"*: solo toca **Reconectar** para continuar sincronizando.
 
 ---
 
