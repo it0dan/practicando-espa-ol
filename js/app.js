@@ -1249,35 +1249,49 @@ function viewHoy() {
   const cur = currentText();
   $('#view').innerHTML = `
   <section class="card">
-    <p class="eyebrow">${cur.custom ? 'Texto personalizado' : 'Texto del día · ' + esc(cur.tema)}</p>
-    <h2>${esc(cur.t)}</h2>
+    <div class="readingHeader">
+      <div>
+        <p class="eyebrow">${cur.custom ? 'Texto personalizado' : 'Texto del día · ' + esc(cur.tema)}</p>
+        <h2>${esc(cur.t)}</h2>
+      </div>
+      <div class="textActions">
+        <button class="mini" id="other" title="Cambiar a otro texto">↻ Otro</button>
+        <button class="mini" id="paste" title="Pegar texto personalizado">📋 Pegar</button>
+      </div>
+    </div>
+
+    <!-- Barra de audio del modelo compacta -->
+    <div class="modelBar">
+      <div class="player">
+        <button class="btn alt miniBtn" id="pPlay">▶ Escuchar</button>
+        <button class="btn alt miniBtn" id="pPause" disabled>⏸</button>
+        <button class="btn alt miniBtn" id="pStop" disabled>■</button>
+      </div>
+      <label class="chk" for="slow"><input type="checkbox" id="slow"> Lento</label>
+      <span class="live" id="pStatus" style="margin:0; font-size:12px"></span>
+    </div>
+
+    <!-- Texto de lectura en foco principal -->
     <div class="reading" id="reading">${readingHTML(cur.txt, result && result.txt === cur.txt ? result.words : null)}</div>
-    
-    <h3>Escuchar el modelo</h3>
-    <div class="player">
-      <button class="btn alt" id="pPlay">▶ Play</button>
-      <button class="btn alt" id="pPause" disabled>⏸ Pausa</button>
-      <button class="btn alt" id="pStop" disabled>■ Stop</button>
+
+    <!-- Botón principal de grabación inmediatamente visible -->
+    <div class="recWrapper">
+      <button class="rec" id="rec">● Grabar lectura</button>
+      <p class="live" id="live"></p>
+      <div class="err" id="err">${cfg.key ? '' : 'Primero configura tu clave de Azure en «Ajustes».'}</div>
     </div>
-    <label class="chk" for="slow"><input type="checkbox" id="slow"> Voz lenta</label>
-    <p class="live" id="pStatus"></p>
-    
-    <div class="btns">
-      <button class="btn alt" id="other">Otro texto</button>
-      <button class="btn alt" id="paste">Pegar texto</button>
-    </div>
-    
+
+    <!-- Consejos fonéticos colapsables (para no empujar el texto ni el botón) -->
     ${
       cur.f && cur.f.length
-        ? `<h3>Sonidos clave de hoy</h3><div class="focus">${cur.f
-            .map(k => `<div><b>${esc(F[k][0])}</b>${esc(F[k][1])}</div>`)
-            .join('')}</div>`
+        ? `<details class="how focusDetails" style="margin-top:16px">
+             <summary>💡 Consejos fonéticos de hoy (${cur.f.map(k => (F[k] ? F[k][0] : k)).join(', ')})</summary>
+             <div class="focus" style="margin-top:10px">
+               ${cur.f.map(k => `<div><b>${esc(F[k][0])}</b>${esc(F[k][1])}</div>`).join('')}
+             </div>
+           </details>`
         : ''
     }
-    
-    <button class="rec" id="rec">● Grabar lectura</button>
-    <p class="live" id="live"></p>
-    <div class="err" id="err">${cfg.key ? '' : 'Primero configura tu clave de Azure en «Ajustes».'}</div>
   </section>
   <div id="res"></div>`;
 

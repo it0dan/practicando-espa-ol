@@ -306,29 +306,143 @@ p {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 20px;
   box-shadow: var(--shadow-md);
   min-width: 0;
 }
 
 .card + .card {
-  margin-top: 20px;
+  margin-top: 16px;
 }
 
 /* ==========================================================================
-   Área de Leitura e Avaliação
+   Área de Leitura e Avaliação (Mobile-First)
    ========================================================================== */
+.readingHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.textActions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.textActions .mini {
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+/* Barra de Áudio do Modelo Compacta */
+.modelBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  margin-bottom: 12px;
+}
+
+.modelBar .player {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+}
+
+.modelBar .player .miniBtn {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+}
+
+.modelBar .chk {
+  margin: 0;
+  font-size: 12px;
+}
+
 .reading {
-  font-size: clamp(20px, 4.5vw, 24px);
-  line-height: 1.85;
+  font-size: clamp(19px, 4.4vw, 23px);
+  line-height: 1.75;
   letter-spacing: -0.01em;
-  margin: 16px 0;
-  padding: 20px;
+  margin: 12px 0;
+  padding: 16px;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   overflow-wrap: anywhere;
   color: var(--text);
+}
+
+/* Wrapper e Botão de Gravação Imediato */
+.recWrapper {
+  margin-top: 14px;
+}
+
+.rec {
+  width: 100%;
+  margin-top: 0;
+  padding: 14px 18px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 640px) {
+  body {
+    padding-top: calc(12px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+    padding-left: max(12px, env(safe-area-inset-left, 0px));
+    padding-right: max(12px, env(safe-area-inset-right, 0px));
+  }
+  .hero {
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-size: 24px;
+    margin: 4px 0 8px;
+  }
+  .tabs {
+    margin-bottom: 14px;
+  }
+  .card {
+    padding: 14px;
+    border-radius: var(--radius-md);
+  }
+  .reading {
+    font-size: 19px;
+    line-height: 1.65;
+    padding: 14px;
+    margin: 10px 0;
+  }
+  .recWrapper {
+    position: sticky;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index: 20;
+    background: var(--surface);
+    padding: 6px 0 2px;
+    border-radius: var(--radius-md);
+  }
 }
 
 .reading .w {
